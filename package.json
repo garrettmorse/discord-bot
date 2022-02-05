@@ -1,7 +1,7 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A discord bot that tracks and scores thumb-ups and thumb-downs",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",

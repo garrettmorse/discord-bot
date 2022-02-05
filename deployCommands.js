@@ -13,16 +13,19 @@ const commands = [
       .setDescription("Displays this Member's Social Credit Score.")
       .setRequired(false)),
   new SlashCommandBuilder()
-    .setName('save')
-    .setDescription('Saves User Data'),
-  new SlashCommandBuilder()
-    .setName('reset')
-    .setDescription('Wipes User Data'),
+    .setName('help')
+    .setDescription('Displays some info'),
+  // new SlashCommandBuilder()
+  //   .setName('save')
+  //   .setDescription('Saves User Data'),
+  // new SlashCommandBuilder()
+  //   .setName('reset')
+  //   .setDescription('Wipes User Data'),
 ]
   .map((command) => command.toJSON());
 
 const rest = new REST({ version: '9' }).setToken(token);
 
-rest.put(Routes.applicationGuildCommands(clientId, testGuildId), { body: commands })
+rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
   .then(() => console.log('Successfully registered application commands.'))
   .catch(console.error);

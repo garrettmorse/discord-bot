@@ -25,12 +25,12 @@ bot.on('messageReactionAdd', async (reaction, _user) => {
   switch (reaction.emoji.name) {
     case 'ToadOk':
       users[reaction.message.author.id] += 1;
-      console.log(`${reaction.message.author.username} gave ${_user.username} a +1 for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} gave ${reaction.message.author.username} a +1 for a total of ${users[reaction.message.author.id]}`);
       break;
 
     case 'NotOkToad':
       users[reaction.message.author.id] -= 1;
-      console.log(`${reaction.message.author.username} gave ${_user.username} a -1 for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} gave ${reaction.message.author.username} a -1 for a total of ${users[reaction.message.author.id]}`);
       break;
 
     default:
@@ -43,12 +43,12 @@ bot.on('messageReactionRemove', async (reaction, _user) => {
   switch (reaction.emoji.name) {
     case 'ToadOk':
       users[reaction.message.author.id] -= 1;
-      console.log(`${reaction.message.author.username} removed a +1 emoji from ${_user.username}'s message for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} removed a +1 emoji from ${reaction.message.author.username}'s message for a total of ${users[reaction.message.author.id]}`);
       break;
 
     case 'NotOkToad':
       users[reaction.message.author.id] += 1;
-      console.log(`${reaction.message.author.username} removed a -1 emoji from ${_user.username}'s message for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} removed a -1 emoji from ${reaction.message.author.username}'s message for a total of ${users[reaction.message.author.id]}`);
       break;
 
     default:
@@ -60,10 +60,13 @@ bot.on('interactionCreate', async (interaction) => {
   const { user } = interaction;
   const target = interaction.options.get('member');
   switch (interaction.commandName) {
+    case 'help':
+      interaction.reply({ content: 'Use the /score command to view social credit score determined by :ToadOk: (+1) and :NotOkToad: (-1).' });
+      break;
     case 'score':
-      if (target && target.value === clientId) interaction.reply({ content: 'CCP have no score!' });
-      else if (target) interaction.reply({ content: `${target.user.username} has a score of ${users[target.value]}` });
-      else interaction.reply({ content: `${user.username} has a score of ${users[user.id]}` });
+      if (target && target.value === clientId) interaction.reply({ content: 'CCP have perfect social credit score!' });
+      else if (target) interaction.reply({ content: `${target.user.username} has a social credit score of ${users[target.value]}` });
+      else interaction.reply({ content: `${user.username} has a social credit score of ${users[user.id]}` });
       break;
     case 'save':
       saveData();
