@@ -5,11 +5,11 @@ module.exports = function handleMessageReactionRemove(reaction, _user, users) {
   }
   switch (reaction.emoji.name) {
     case 'ToadOk':
-      console.log(`${_user.username} removed a +1 emoji from ${reaction.message.author.username}'s message for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} (${_user.id}) removed a +1 emoji from ${reaction.message.author.username}'s (${reaction.message.author.id}) message for a total of ${users[reaction.message.author.id]}`);
       return users[reaction.message.author.id] - 1;
 
     case 'NotOkToad':
-      console.log(`${_user.username} removed a -1 emoji from ${reaction.message.author.username}'s message for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} (${_user.id}) removed a -1 emoji from ${reaction.message.author.username}'s (${reaction.message.author.id}) message for a total of ${users[reaction.message.author.id]}`);
       return users[reaction.message.author.id] + 1;
 
     default:

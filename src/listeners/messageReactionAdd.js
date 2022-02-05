@@ -5,11 +5,11 @@ module.exports = function handleMessageReactionAdd(reaction, _user, users) {
   }
   switch (reaction.emoji.name) {
     case 'ToadOk':
-      console.log(`${_user.username}(${_user.id}) gave ${reaction.message.author.username} (${reaction.message.author.id}) a +1 for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} (${_user.id}) gave ${reaction.message.author.username} (${reaction.message.author.id}) a +1 for a total of ${users[reaction.message.author.id]}`);
       return users[reaction.message.author.id] + 1;
 
     case 'NotOkToad':
-      console.log(`${_user.username}(${_user.username.id}) gave ${reaction.message.author.username} (${reaction.message.author.id}) a -1 for a total of ${users[reaction.message.author.id]}`);
+      console.log(`${_user.username} (${_user.id}) gave ${reaction.message.author.username} (${reaction.message.author.id}) a -1 for a total of ${users[reaction.message.author.id]}`);
       return users[reaction.message.author.id] - 1;
 
     default:
