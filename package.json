@@ -35,7 +35,8 @@
   "eslintConfig": {
     "extends": "airbnb",
     "rules": {
-      "no-console": "off"
+      "no-console": "off",
+      "global-require": "off"
     }
   }
 }

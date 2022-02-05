@@ -12,6 +12,12 @@ const commands = [
     .addUserOption((option) => option.setName('member')
       .setDescription("Displays this Member's Social Credit Score.")
       .setRequired(false)),
+  new SlashCommandBuilder()
+    .setName('save')
+    .setDescription('Saves User Data'),
+  new SlashCommandBuilder()
+    .setName('reset')
+    .setDescription('Wipes User Data'),
 ]
   .map((command) => command.toJSON());
 
