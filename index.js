@@ -23,7 +23,7 @@ bot.on('messageReactionRemove', async (reaction, _user) => {
 });
 
 bot.on('interactionCreate', async (interaction) => {
-  users = interactionCreate(interaction, users);
+  users = await interactionCreate(interaction, users);
 });
 
 process.on('SIGINT', () => handleInterrupt(users));
