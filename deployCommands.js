@@ -18,6 +18,6 @@ function deployCommands(_commands, guild) {
     .catch(console.error);
 }
 
-deployCommands(commands, guildId);
+// deployCommands(commands, guildId);
 
 // deployCommands(adminCommands, testGuildId);
