@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
 const { clientId, guildId } = require('../config/constants');
+const { roleIds } = require('../config/text.json');
 const bot = require('./bot');
 
 async function reduceUsers(users) {
@@ -8,7 +9,6 @@ async function reduceUsers(users) {
   const reduced = Object.entries(users).reduce((acc, entry) => {
     const [userId, userScore] = entry;
     if (clientId === userId) return acc;
-    console.log(members.get(userId));
     const { username } = members.get(userId).user;
     return [...acc, { [username]: userScore }];
   }, []);
@@ -50,6 +50,77 @@ async function buildLeaderboardEmbed(users, user, reversed = false) {
     .setTimestamp();
 }
 
+function shallowCopy(obj) {
+  const copy = {};
+  Object.keys(obj).forEach((key) => copy[key] = obj[key]);
+  return copy;
+}
+
+function calculateDistribution(sortedUsersArr) {
+  const distribution = {
+    ten: 0,
+    quarter: 0,
+    fifteen: 0,
+  };
+  const len = sortedUsersArr.length;
+  distribution.ten = Math.round(len * 0.1);
+  distribution.quarter = Math.round(len * 0.25);
+  distribution.fifteen = Math.round(len * 0.15);
+  // calculate difference between the approximate values and the actual length
+  // then add the diff back to the quarter
+  const diff = (Object.values(distribution).reduce((count, value) => count + value, 0) * 2) - len;
+  distribution.quarter += diff;
+  return distribution;
+}
+
+// remove all CCP roles and add the specific one we want
+async function assignRoles(memberRoleManager, roleId) {
+  await memberRoleManager.remove(roleIds);
+  await memberRoleManager.add(roleId);
+}
+
+// given the users object, calculate roles for their scores
+// first, determine the distribution of top, bottom #1/10%/25%/15%, in that order
+// then, assign the appropriate role to each group
+async function calculateRoles(_users) {
+  const guildMemberMgr = bot.guilds.cache.get(guildId);
+  const members = await guildMemberMgr.members.fetch();
+  const users = shallowCopy(_users);
+  // sort from least to greatest score
+  const sortedUsersArr = Object.entries(users)
+    .reduce((acc, [key, value]) => [...acc, { [key]: value }], [])
+    .sort((cur, next) => Object.values(cur)[0] - Object.values(next)[0]);
+  const distribution = calculateDistribution(sortedUsersArr);
+  // pop top userId
+  assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[1]);
+  // next 10%
+  for (let i = 0; i < distribution.ten; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[3]);
+  }
+  // next 25%
+  for (let i = 1; i < distribution.quarter; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[5]);
+  }
+  // next 15%
+  for (let i = 1; i < distribution.fifteen; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[7]);
+  }
+  // next 15%
+  for (let i = 1; i < distribution.fifteen; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[6]);
+  }
+  // next 25%
+  for (let i = 1; i < distribution.quarter; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[4]);
+  }
+  // next 10%
+  for (let i = 1; i < distribution.ten; i += 1) {
+    assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[2]);
+  }
+  // pop bottom userId
+  assignRoles(members.get(Object.keys(sortedUsersArr.pop())[0]).roles, roleIds[0]);
+}
+
 async function resetUserData() {
   const users = (await bot.guilds.cache.get(guildId).members.list({ limit: 1000 }))
     .map((_, v) => v)
@@ -66,6 +137,7 @@ function saveUserData(users) {
 
 module.exports = {
   buildLeaderboardEmbed,
+  calculateRoles,
   saveUserData,
   resetUserData,
 };
