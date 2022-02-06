@@ -1,31 +1,23 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
+const devCommands = require('./commands/devCommands');
+const prodCommands = require('./commands/prodCommands');
 const {
   clientId, guildId, token, testGuildId,
 } = require('./config/constants');
 
-const commands = [
-  new SlashCommandBuilder()
-    .setName('score')
-    .setDescription('Displays Social Credit Score.')
-    .addUserOption((option) => option.setName('member')
-      .setDescription("Displays this Member's Social Credit Score.")
-      .setRequired(false)),
-  new SlashCommandBuilder()
-    .setName('help')
-    .setDescription('Displays some info'),
-  // new SlashCommandBuilder()
-  //   .setName('save')
-  //   .setDescription('Saves User Data'),
-  // new SlashCommandBuilder()
-  //   .setName('reset')
-  //   .setDescription('Wipes User Data'),
-]
+const rest = new REST({ version: '9' }).setToken(token);
+const commands = [...prodCommands]
+  .map((command) => command.toJSON());
+const adminCommands = [...devCommands, ...prodCommands]
   .map((command) => command.toJSON());
 
-const rest = new REST({ version: '9' }).setToken(token);
+function deployCommands(_commands, guild) {
+  rest.put(Routes.applicationGuildCommands(clientId, guild), { body: _commands })
+    .then(() => console.log('Successfully registered application commands.'))
+    .catch(console.error);
+}
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-  .then(() => console.log('Successfully registered application commands.'))
-  .catch(console.error);
+// deployCommands(commands, guildId);
+
+// deployCommands(adminCommands, testGuildId);
