@@ -3,7 +3,7 @@ const { clientId } = require('../../config/constants');
 
 module.exports = async function handleInteractionCreate(interaction, users) {
   const { user } = interaction;
-  const target = interaction.options.get('member');
+  const target = interaction.options.get('comrade');
   const reversed = interaction.options.get('reverse');
   switch (interaction.commandName) {
     case 'help':
