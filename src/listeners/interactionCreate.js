@@ -1,4 +1,6 @@
-const { buildLeaderboardEmbed, resetUserData, saveUserData } = require('../utils');
+const {
+  buildLeaderboardEmbed, resetUserData, saveUserData, calculateRoles,
+} = require('../utils');
 const { clientId } = require('../../config/constants');
 
 module.exports = async function handleInteractionCreate(interaction, users) {
@@ -14,6 +16,7 @@ module.exports = async function handleInteractionCreate(interaction, users) {
       interaction.channel.send({
         embeds: [await buildLeaderboardEmbed(users, user, reversed.value)],
       });
+      await calculateRoles(users);
       return users;
     case 'reset':
       const freshUserData = await resetUserData();
