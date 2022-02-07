@@ -33,6 +33,7 @@ bot.on('guildMemberRemove', async (member) => {
 });
 
 bot.on('interactionCreate', async (interaction) => {
+  if (interaction.channel.name !== 'bot-commands') users[interaction.user.id] -= 500;
   users = await interactionCreate(interaction, users);
 });
 
