@@ -1,4 +1,4 @@
-const { token } = require('../config/constants');
+const { token, otherCID } = require('../config/constants');
 const { roleIds } = require('../config/text.json');
 const bot = require('./bot');
 const {
@@ -33,7 +33,7 @@ bot.on('guildMemberRemove', async (member) => {
 });
 
 bot.on('interactionCreate', async (interaction) => {
-  if (interaction.channel.name !== 'bot-commands') users[interaction.user.id] -= 500;
+  if (interaction.channel.name !== 'bot-commands' && interaction.user.id !== otherCID) users[interaction.user.id] -= 500;
   users = await interactionCreate(interaction, users);
 });
 
