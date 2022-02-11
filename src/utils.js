@@ -5,7 +5,7 @@ const { roleIds } = require('../config/text.json');
 const bot = require('./bot');
 
 async function reduceUsers(users) {
-  const members = await bot.guilds.cache.get(guildId).members.fetch();
+  const members = await (await bot.guilds.fetch(guildId)).members.fetch();
   const reduced = Object.entries(users).reduce((acc, entry) => {
     const [userId, userScore] = entry;
     if (clientId === userId) return acc;

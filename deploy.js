@@ -34,6 +34,13 @@ async function deployRoles(_roles, _guild) {
   });
 }
 
+async function changeRoleName(roleId, newName) {
+  const role = await (await bot.guilds.fetch(guildId)).roles.fetch(roleId);
+  await role.setName(newName);
+}
+
+// bot.login(token);
+
 // deployCommands(commands, guildId);
 
 // deployCommands(adminCommands, testGuildId);
