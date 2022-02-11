@@ -22,6 +22,7 @@ module.exports = async function handleInteractionCreate(interaction, users) {
       const freshUserData = await resetUserData();
       return freshUserData;
     case 'save':
+      console.log(`Saving:\n${JSON.stringify(users, null, 2)}`);
       saveUserData(users);
       interaction.reply({ content: 'Done.' });
       break;
