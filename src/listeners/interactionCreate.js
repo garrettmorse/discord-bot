@@ -7,7 +7,7 @@ module.exports = async function handleInteractionCreate(interaction, users) {
   const { user } = interaction;
   const target = interaction.options.get('comrade');
   const reversed = interaction.options.get('reverse');
-  const gifIdx = interaction.options.get('whichGif');
+  const gifIdx = interaction.options.get('whichgif');
   switch (interaction.commandName) {
     case 'help':
       interaction.reply({ content: 'Use the /score command to view social credit score determined by :ToadOk: (+1) and :NotOkToad: (-1).' });
