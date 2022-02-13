@@ -43,6 +43,6 @@ async function changeRoleName(roleId, newName) {
 
 // deployCommands(commands, guildId);
 
-// deployCommands(adminCommands, testGuildId);
+deployCommands(adminCommands, testGuildId);
 
 // deployRoles(roles, guildId);

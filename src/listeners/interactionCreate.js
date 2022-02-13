@@ -7,6 +7,7 @@ module.exports = async function handleInteractionCreate(interaction, users) {
   const { user } = interaction;
   const target = interaction.options.get('comrade');
   const reversed = interaction.options.get('reverse');
+  const gifIdx = interaction.options.get('whichGif');
   switch (interaction.commandName) {
     case 'help':
       interaction.reply({ content: 'Use the /score command to view social credit score determined by :ToadOk: (+1) and :NotOkToad: (-1).' });
@@ -21,6 +22,10 @@ module.exports = async function handleInteractionCreate(interaction, users) {
     case 'reset':
       const freshUserData = await resetUserData();
       return freshUserData;
+    case 'send':
+      console.log(`Sending GIF ${gifIdx} in #bot-commands`);
+      interaction.reply({ content: 'https://tenor.com/view/dwayne-johnson-looking-confused-the-rock-gif-21978284' });
+      break;
     case 'save':
       console.log(`Saving:\n${JSON.stringify(users, null, 2)}`);
       saveUserData(users);
