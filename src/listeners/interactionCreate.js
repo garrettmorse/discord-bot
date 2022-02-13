@@ -1,7 +1,9 @@
 const {
   buildLeaderboardEmbed, resetUserData, saveUserData, calculateRoles,
 } = require('../utils');
-const { clientId } = require('../../config/constants');
+const { clientId, botCommandsId } = require('../../config/constants');
+const text = require('../../config/text.json');
+const bot = require('../bot');
 
 module.exports = async function handleInteractionCreate(interaction, users) {
   const { user } = interaction;
@@ -23,8 +25,9 @@ module.exports = async function handleInteractionCreate(interaction, users) {
       const freshUserData = await resetUserData();
       return freshUserData;
     case 'send':
-      console.log(`Sending GIF ${gifIdx} in #bot-commands`);
-      interaction.reply({ content: 'https://tenor.com/view/dwayne-johnson-looking-confused-the-rock-gif-21978284' });
+      console.log(`Sending GIF ${gifIdx.value} in #bot-commands`);
+      interaction.reply({ content: text.gifs.sus[gifIdx.value] });
+      (await bot.channels.fetch(botCommandsId)).send(text.gifs.sus[gifIdx.value]);
       break;
     case 'save':
       console.log(`Saving:\n${JSON.stringify(users, null, 2)}`);
