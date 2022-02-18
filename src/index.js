@@ -24,11 +24,13 @@ bot.on('messageReactionRemove', async (reaction, _user) => {
 });
 
 bot.on('guildMemberAdd', async (member) => {
+  console.log(`Welcoming ${member.user.username} to the server!`);
   users[member.user.id] = 0;
   await member.roles.add(roleIds[8]);
 });
 
 bot.on('guildMemberRemove', async (member) => {
+  console.log(`Goodbye ${member.user.username}!`);
   delete users[member.user.id];
 });
 
